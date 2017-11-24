@@ -104,13 +104,25 @@ namespace MultiClipboardDeluxePro
 
         private void ClipList_SelectionChanged(object sender, EventArgs e)
         {
+            if(ClipList.RowCount > 0)
+            {
+                string strID = ClipList.SelectedRows[0].Cells[0].Value.ToString();
+                long ID = long.Parse(strID);
+                string ClipData = db.Clips.Where(c => c.ID == ID).First().Data;
+                IsMCDPSet = true;
+                TextArea.Text = ClipData;
+                Clipboard.SetText(ClipData, TextDataFormat.Text);
+                IsMCDPSet = false;
+            }
+        }
+
+        private void ClipList_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
+        {
             string strID = ClipList.SelectedRows[0].Cells[0].Value.ToString();
             long ID = long.Parse(strID);
-            string ClipData = db.Clips.Where(c => c.ID == ID).First().Data;
-            IsMCDPSet = true;
-            TextArea.Text = ClipData;
-            Clipboard.SetText(ClipData, TextDataFormat.Text);
-            IsMCDPSet = false;
+            var clip = db.Clips.Where(c => c.ID == ID).First();
+            db.Clips.Remove(clip);
+            db.SaveChanges();
         }
 
         private void InitColors()
@@ -627,6 +639,7 @@ namespace MultiClipboardDeluxePro
 				action.Invoke();
 			}
 		}
+
 
 
 

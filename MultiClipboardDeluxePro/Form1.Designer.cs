@@ -128,6 +128,7 @@
             this.ClipList.Size = new System.Drawing.Size(261, 741);
             this.ClipList.TabIndex = 1;
             this.ClipList.SelectionChanged += new System.EventHandler(this.ClipList_SelectionChanged);
+            this.ClipList.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.ClipList_UserDeletingRow);
             // 
             // ID
             // 
@@ -172,7 +173,7 @@
             this.PanelSearch.Controls.Add(this.BtnPrevSearch);
             this.PanelSearch.Controls.Add(this.BtnCloseSearch);
             this.PanelSearch.Controls.Add(this.TxtSearch);
-            this.PanelSearch.Location = new System.Drawing.Point(206, 68);
+            this.PanelSearch.Location = new System.Drawing.Point(200, 68);
             this.PanelSearch.Name = "PanelSearch";
             this.PanelSearch.Size = new System.Drawing.Size(292, 40);
             this.PanelSearch.TabIndex = 11;
