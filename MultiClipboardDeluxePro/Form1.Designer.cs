@@ -77,7 +77,7 @@
             this.ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Title = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Timestamp = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Data = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Type = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.SplitPanel)).BeginInit();
             this.SplitPanel.Panel1.SuspendLayout();
             this.SplitPanel.Panel2.SuspendLayout();
@@ -498,7 +498,7 @@
             this.ID,
             this.Title,
             this.Timestamp,
-            this.Data});
+            this.Type});
             this.ClipList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ClipList.Location = new System.Drawing.Point(0, 20);
             this.ClipList.Name = "ClipList";
@@ -526,12 +526,12 @@
             this.Timestamp.Name = "Timestamp";
             this.Timestamp.ReadOnly = true;
             // 
-            // Data
+            // Type
             // 
-            this.Data.HeaderText = "Data";
-            this.Data.Name = "Data";
-            this.Data.ReadOnly = true;
-            this.Data.Visible = false;
+            this.Type.HeaderText = "Type";
+            this.Type.Name = "Type";
+            this.Type.ReadOnly = true;
+            this.Type.Visible = false;
             // 
             // MainForm
             // 
@@ -608,7 +608,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ID;
         private System.Windows.Forms.DataGridViewTextBoxColumn Title;
         private System.Windows.Forms.DataGridViewTextBoxColumn Timestamp;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Data;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Type;
     }
 }
 

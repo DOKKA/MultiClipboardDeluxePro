@@ -23,7 +23,8 @@ namespace MultiClipboardDeluxePro
 
         ScintillaNET.Scintilla TextArea;
         ClipboardMonitor.ClipboardMonitor ClipMonitor;
-        int thaIndex = 0;
+        Data.DBContext db;
+
         private void MainForm_Load(object sender, EventArgs e)
         {
             SplitPanel.BringToFront();
@@ -69,49 +70,42 @@ namespace MultiClipboardDeluxePro
 
             ClipMonitor = new ClipboardMonitor.ClipboardMonitor();
             ClipMonitor.ClipboardData += Cm_ClipboardData;
+            db = new Data.DBContext();
 
+            var clips = db.Clips.ToArray();
+            foreach(var clip in clips)
+            {
+                DataGridViewRow newRow = new DataGridViewRow();
+                newRow.Cells.Add(new DataGridViewTextBoxCell() { Value = clip.ID.ToString() });
+                newRow.Cells.Add(new DataGridViewTextBoxCell() { Value = clip.Title });
+                newRow.Cells.Add(new DataGridViewTextBoxCell() { Value = String.Format("{0:G}", clip.Timestamp) });
+                newRow.Cells.Add(new DataGridViewTextBoxCell() { Value = clip.Type });
+                ClipList.Rows.Add(newRow);
+            }
         }
 
         private void Cm_ClipboardData(object sender, System.Windows.RoutedEventArgs e)
         {
-            TextArea.Text = ClipMonitor.ClipboardText;
-            //// 
-            //// ID
-            //// 
-            //this.ID.HeaderText = "ID";
-            //this.ID.Name = "ID";
-            //this.ID.ReadOnly = true;
-            //this.ID.Visible = false;
-            //// 
-            //// Title
-            //// 
-            //this.Title.HeaderText = "Title";
-            //this.Title.Name = "Title";
-            //this.Title.ReadOnly = true;
+            var clip = new Data.Clip()
+            {
+                Data = ClipMonitor.ClipboardText,
+                Title = ClipTitle.Text,
+                Timestamp = DateTime.Now,
+                Type = "C#"
+            };
 
-            //// 
-            //// Timestamp
-            //// 
-            //this.Timestamp.HeaderText = "Timestamp";
-            //this.Timestamp.Name = "Timestamp";
-            //this.Timestamp.ReadOnly = true;
-            //// 
-            //// Data
-            //// 
-            //this.Data.HeaderText = "Data";
-            //this.Data.Name = "Data";
-            //this.Data.ReadOnly = true;
-            //this.Data.Visible = false;
+
+            db.Clips.Add(clip);
+            db.SaveChanges();
+
+
             DataGridViewRow newRow = new DataGridViewRow();
-            newRow.Cells.Add(new DataGridViewTextBoxCell() {Value = (thaIndex++).ToString() });
-            newRow.Cells.Add(new DataGridViewTextBoxCell() { Value = ClipTitle.Text });
-            newRow.Cells.Add(new DataGridViewTextBoxCell() { Value = String.Format("{0:G}", DateTime.Now) });
-            newRow.Cells.Add(new DataGridViewTextBoxCell() { Value = ClipMonitor.ClipboardText });
-            //newRow.Cells[1].Value = (thaIndex++).ToString();
-            //newRow.Cells[2].Value = "";
-            //newRow.Cells[3].Value = String.Format("{0:G}", DateTime.Now);
-            //newRow.Cells[4].Value = ClipMonitor.ClipboardText;
+            newRow.Cells.Add(new DataGridViewTextBoxCell() { Value = clip.ID.ToString() });
+            newRow.Cells.Add(new DataGridViewTextBoxCell() { Value = clip.Title });
+            newRow.Cells.Add(new DataGridViewTextBoxCell() { Value = String.Format("{0:G}", clip.Timestamp) });
+            newRow.Cells.Add(new DataGridViewTextBoxCell() { Value = clip.Type });
             ClipList.Rows.Add(newRow);
+            TextArea.Text = ClipMonitor.ClipboardText;
         }
 
         private void InitColors()
