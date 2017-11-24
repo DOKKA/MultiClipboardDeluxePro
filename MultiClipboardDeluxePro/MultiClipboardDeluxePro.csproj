@@ -32,6 +32,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ClipboardMonitor">
+      <HintPath>..\..\..\..\..\Downloads\ClipboardMonitor.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
     <Reference Include="ScintillaNET, Version=3.6.3.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\jacobslusser.ScintillaNET.3.6.3\lib\net40\ScintillaNET.dll</HintPath>
     </Reference>

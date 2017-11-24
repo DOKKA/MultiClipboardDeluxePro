@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using ScintillaNET;
 using ScintillaNET.Demo.Utils;
 using System.IO;
+using ClipboardMonitor;
 
 namespace MultiClipboardDeluxePro
 {
@@ -21,7 +22,8 @@ namespace MultiClipboardDeluxePro
         }
 
         ScintillaNET.Scintilla TextArea;
-
+        ClipboardMonitor.ClipboardMonitor ClipMonitor;
+        int thaIndex = 0;
         private void MainForm_Load(object sender, EventArgs e)
         {
             SplitPanel.BringToFront();
@@ -31,7 +33,7 @@ namespace MultiClipboardDeluxePro
 
 
             // BASIC CONFIG
-            textBox2.Dock = DockStyle.Top;
+            ClipTitle.Dock = DockStyle.Top;
             TextArea.Dock = DockStyle.Fill;
             TextArea.BringToFront();
 
@@ -64,6 +66,52 @@ namespace MultiClipboardDeluxePro
 
             // INIT HOTKEYS
             InitHotkeys();
+
+            ClipMonitor = new ClipboardMonitor.ClipboardMonitor();
+            ClipMonitor.ClipboardData += Cm_ClipboardData;
+
+        }
+
+        private void Cm_ClipboardData(object sender, System.Windows.RoutedEventArgs e)
+        {
+            TextArea.Text = ClipMonitor.ClipboardText;
+            //// 
+            //// ID
+            //// 
+            //this.ID.HeaderText = "ID";
+            //this.ID.Name = "ID";
+            //this.ID.ReadOnly = true;
+            //this.ID.Visible = false;
+            //// 
+            //// Title
+            //// 
+            //this.Title.HeaderText = "Title";
+            //this.Title.Name = "Title";
+            //this.Title.ReadOnly = true;
+
+            //// 
+            //// Timestamp
+            //// 
+            //this.Timestamp.HeaderText = "Timestamp";
+            //this.Timestamp.Name = "Timestamp";
+            //this.Timestamp.ReadOnly = true;
+            //// 
+            //// Data
+            //// 
+            //this.Data.HeaderText = "Data";
+            //this.Data.Name = "Data";
+            //this.Data.ReadOnly = true;
+            //this.Data.Visible = false;
+            DataGridViewRow newRow = new DataGridViewRow();
+            newRow.Cells.Add(new DataGridViewTextBoxCell() {Value = (thaIndex++).ToString() });
+            newRow.Cells.Add(new DataGridViewTextBoxCell() { Value = ClipTitle.Text });
+            newRow.Cells.Add(new DataGridViewTextBoxCell() { Value = String.Format("{0:G}", DateTime.Now) });
+            newRow.Cells.Add(new DataGridViewTextBoxCell() { Value = ClipMonitor.ClipboardText });
+            //newRow.Cells[1].Value = (thaIndex++).ToString();
+            //newRow.Cells[2].Value = "";
+            //newRow.Cells[3].Value = String.Format("{0:G}", DateTime.Now);
+            //newRow.Cells[4].Value = ClipMonitor.ClipboardText;
+            ClipList.Rows.Add(newRow);
         }
 
         private void InitColors()

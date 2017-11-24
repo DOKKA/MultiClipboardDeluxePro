@@ -30,9 +30,8 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.SplitPanel = new System.Windows.Forms.SplitContainer();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.textBox1 = new System.Windows.Forms.TextBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.ClipTitle = new System.Windows.Forms.TextBox();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -74,13 +73,18 @@
             this.TxtSearch = new System.Windows.Forms.TextBox();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toggleCollapseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ClipList = new System.Windows.Forms.DataGridView();
+            this.ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Title = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Timestamp = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Data = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.SplitPanel)).BeginInit();
             this.SplitPanel.Panel1.SuspendLayout();
             this.SplitPanel.Panel2.SuspendLayout();
             this.SplitPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.PanelSearch.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ClipList)).BeginInit();
             this.SuspendLayout();
             // 
             // SplitPanel
@@ -91,26 +95,17 @@
             // 
             // SplitPanel.Panel1
             // 
-            this.SplitPanel.Panel1.Controls.Add(this.dataGridView1);
+            this.SplitPanel.Panel1.Controls.Add(this.ClipList);
             this.SplitPanel.Panel1.Controls.Add(this.textBox1);
             // 
             // SplitPanel.Panel2
             // 
             this.SplitPanel.Panel2.Controls.Add(this.PanelSearch);
-            this.SplitPanel.Panel2.Controls.Add(this.textBox2);
+            this.SplitPanel.Panel2.Controls.Add(this.ClipTitle);
             this.SplitPanel.Size = new System.Drawing.Size(784, 761);
             this.SplitPanel.SplitterDistance = 261;
             this.SplitPanel.SplitterWidth = 10;
             this.SplitPanel.TabIndex = 1;
-            // 
-            // dataGridView1
-            // 
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridView1.Location = new System.Drawing.Point(0, 20);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(261, 741);
-            this.dataGridView1.TabIndex = 1;
             // 
             // textBox1
             // 
@@ -120,12 +115,12 @@
             this.textBox1.Size = new System.Drawing.Size(261, 20);
             this.textBox1.TabIndex = 0;
             // 
-            // textBox2
+            // ClipTitle
             // 
-            this.textBox2.Location = new System.Drawing.Point(3, 3);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(507, 20);
-            this.textBox2.TabIndex = 0;
+            this.ClipTitle.Location = new System.Drawing.Point(3, 3);
+            this.ClipTitle.Name = "ClipTitle";
+            this.ClipTitle.Size = new System.Drawing.Size(507, 20);
+            this.ClipTitle.TabIndex = 0;
             // 
             // menuStrip1
             // 
@@ -495,6 +490,49 @@
             this.toggleCollapseToolStripMenuItem.Text = "[<-]";
             this.toggleCollapseToolStripMenuItem.Click += new System.EventHandler(this.toggleCollapseToolStripMenuItem_Click);
             // 
+            // ClipList
+            // 
+            this.ClipList.AllowUserToAddRows = false;
+            this.ClipList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.ClipList.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.ID,
+            this.Title,
+            this.Timestamp,
+            this.Data});
+            this.ClipList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ClipList.Location = new System.Drawing.Point(0, 20);
+            this.ClipList.Name = "ClipList";
+            this.ClipList.ReadOnly = true;
+            this.ClipList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.ClipList.Size = new System.Drawing.Size(261, 741);
+            this.ClipList.TabIndex = 1;
+            // 
+            // ID
+            // 
+            this.ID.HeaderText = "ID";
+            this.ID.Name = "ID";
+            this.ID.ReadOnly = true;
+            this.ID.Visible = false;
+            // 
+            // Title
+            // 
+            this.Title.HeaderText = "Title";
+            this.Title.Name = "Title";
+            this.Title.ReadOnly = true;
+            // 
+            // Timestamp
+            // 
+            this.Timestamp.HeaderText = "Timestamp";
+            this.Timestamp.Name = "Timestamp";
+            this.Timestamp.ReadOnly = true;
+            // 
+            // Data
+            // 
+            this.Data.HeaderText = "Data";
+            this.Data.Name = "Data";
+            this.Data.ReadOnly = true;
+            this.Data.Visible = false;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -511,11 +549,11 @@
             this.SplitPanel.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.SplitPanel)).EndInit();
             this.SplitPanel.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.PanelSearch.ResumeLayout(false);
             this.PanelSearch.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ClipList)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -524,8 +562,7 @@
         #endregion
         private System.Windows.Forms.SplitContainer SplitPanel;
         private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.DataGridView dataGridView1;
-        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.TextBox ClipTitle;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openToolStripMenuItem;
@@ -567,6 +604,11 @@
         private System.Windows.Forms.TextBox TxtSearch;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem toggleCollapseToolStripMenuItem;
+        private System.Windows.Forms.DataGridView ClipList;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Title;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Timestamp;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Data;
     }
 }
 
