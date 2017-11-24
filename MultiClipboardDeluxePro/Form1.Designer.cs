@@ -73,6 +73,7 @@
             this.BtnCloseSearch = new System.Windows.Forms.Button();
             this.TxtSearch = new System.Windows.Forms.TextBox();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toggleCollapseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.SplitPanel)).BeginInit();
             this.SplitPanel.Panel1.SuspendLayout();
             this.SplitPanel.Panel2.SuspendLayout();
@@ -134,7 +135,8 @@
             this.fileToolStripMenuItem,
             this.editToolStripMenuItem,
             this.searchToolStripMenuItem,
-            this.viewToolStripMenuItem});
+            this.viewToolStripMenuItem,
+            this.toggleCollapseToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(784, 27);
@@ -486,6 +488,13 @@
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
+            // toggleCollapseToolStripMenuItem
+            // 
+            this.toggleCollapseToolStripMenuItem.Name = "toggleCollapseToolStripMenuItem";
+            this.toggleCollapseToolStripMenuItem.Size = new System.Drawing.Size(45, 23);
+            this.toggleCollapseToolStripMenuItem.Text = "[<-]";
+            this.toggleCollapseToolStripMenuItem.Click += new System.EventHandler(this.toggleCollapseToolStripMenuItem_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -557,6 +566,7 @@
         private System.Windows.Forms.Button BtnCloseSearch;
         private System.Windows.Forms.TextBox TxtSearch;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem toggleCollapseToolStripMenuItem;
     }
 }
 

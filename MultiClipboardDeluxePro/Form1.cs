@@ -405,13 +405,27 @@ namespace MultiClipboardDeluxePro
 		private void expandAllToolStripMenuItem_Click(object sender, EventArgs e) {
 			TextArea.FoldAll(FoldAction.Expand);
 		}
-		
 
-		#endregion
+        private void toggleCollapseToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (!SplitPanel.Panel1Collapsed)
+            {
+                SplitPanel.Panel1Collapsed = true;
+                toggleCollapseToolStripMenuItem.Text = @"[->]";
+            } else
+            {
+                SplitPanel.Panel1Collapsed = false;
+                toggleCollapseToolStripMenuItem.Text = @"[<-]";
+            }
 
-		#region Uppercase / Lowercase
+        }
 
-		private void Lowercase() {
+
+        #endregion
+
+        #region Uppercase / Lowercase
+
+        private void Lowercase() {
 
 			// save the selection
 			int start = TextArea.SelectionStart;
@@ -559,6 +573,7 @@ namespace MultiClipboardDeluxePro
 				action.Invoke();
 			}
 		}
+
 
 
 
