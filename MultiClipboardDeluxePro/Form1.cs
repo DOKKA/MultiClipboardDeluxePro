@@ -24,6 +24,7 @@ namespace MultiClipboardDeluxePro
         ScintillaNET.Scintilla TextArea;
         ClipboardMonitor.ClipboardMonitor ClipMonitor;
         Data.DBContext db;
+        bool IsMCDPSet = false;
 
         private void MainForm_Load(object sender, EventArgs e)
         {
@@ -72,40 +73,44 @@ namespace MultiClipboardDeluxePro
             ClipMonitor.ClipboardData += Cm_ClipboardData;
             db = new Data.DBContext();
 
-            var clips = db.Clips.ToArray();
+            var clips = db.Clips.Select(c => new { ID = c.ID, Title = c.Title, Timestamp = c.Timestamp, Type = c.Type }).ToList();
             foreach(var clip in clips)
             {
-                DataGridViewRow newRow = new DataGridViewRow();
-                newRow.Cells.Add(new DataGridViewTextBoxCell() { Value = clip.ID.ToString() });
-                newRow.Cells.Add(new DataGridViewTextBoxCell() { Value = clip.Title });
-                newRow.Cells.Add(new DataGridViewTextBoxCell() { Value = String.Format("{0:G}", clip.Timestamp) });
-                newRow.Cells.Add(new DataGridViewTextBoxCell() { Value = clip.Type });
-                ClipList.Rows.Add(newRow);
+                ClipList.Rows.Insert(0, new string[] { clip.ID.ToString(), clip.Title, clip.Timestamp.ToString("G"), clip.Type });
             }
         }
 
         private void Cm_ClipboardData(object sender, System.Windows.RoutedEventArgs e)
         {
-            var clip = new Data.Clip()
+            //only add new clip if the type is text and the program isn't setting the clipboard
+            if (ClipMonitor.ClipboardContainsText && !IsMCDPSet)
             {
-                Data = ClipMonitor.ClipboardText,
-                Title = ClipTitle.Text,
-                Timestamp = DateTime.Now,
-                Type = "C#"
-            };
+                var clip = new Data.Clip()
+                {
+                    Data = ClipMonitor.ClipboardText,
+                    Title = ClipTitle.Text,
+                    Timestamp = DateTime.Now,
+                    Type = "C#"
+                };
 
 
-            db.Clips.Add(clip);
-            db.SaveChanges();
+                db.Clips.Add(clip);
+                db.SaveChanges();
 
+                ClipList.Rows.Insert(0, new string[] { clip.ID.ToString(), clip.Title, clip.Timestamp.ToString("G"), clip.Type });
+                TextArea.Text = ClipMonitor.ClipboardText;
+            }
+        }
 
-            DataGridViewRow newRow = new DataGridViewRow();
-            newRow.Cells.Add(new DataGridViewTextBoxCell() { Value = clip.ID.ToString() });
-            newRow.Cells.Add(new DataGridViewTextBoxCell() { Value = clip.Title });
-            newRow.Cells.Add(new DataGridViewTextBoxCell() { Value = String.Format("{0:G}", clip.Timestamp) });
-            newRow.Cells.Add(new DataGridViewTextBoxCell() { Value = clip.Type });
-            ClipList.Rows.Add(newRow);
-            TextArea.Text = ClipMonitor.ClipboardText;
+        private void ClipList_SelectionChanged(object sender, EventArgs e)
+        {
+            string strID = ClipList.SelectedRows[0].Cells[0].Value.ToString();
+            long ID = long.Parse(strID);
+            string ClipData = db.Clips.Where(c => c.ID == ID).First().Data;
+            IsMCDPSet = true;
+            TextArea.Text = ClipData;
+            Clipboard.SetText(ClipData, TextDataFormat.Text);
+            IsMCDPSet = false;
         }
 
         private void InitColors()
@@ -622,6 +627,7 @@ namespace MultiClipboardDeluxePro
 				action.Invoke();
 			}
 		}
+
 
 
 

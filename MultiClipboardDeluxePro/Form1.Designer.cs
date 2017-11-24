@@ -30,11 +30,22 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.SplitPanel = new System.Windows.Forms.SplitContainer();
+            this.ClipList = new System.Windows.Forms.DataGridView();
+            this.ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Title = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Timestamp = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Type = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.textBox1 = new System.Windows.Forms.TextBox();
+            this.PanelSearch = new System.Windows.Forms.Panel();
+            this.BtnNextSearch = new System.Windows.Forms.Button();
+            this.BtnPrevSearch = new System.Windows.Forms.Button();
+            this.BtnCloseSearch = new System.Windows.Forms.Button();
+            this.TxtSearch = new System.Windows.Forms.TextBox();
             this.ClipTitle = new System.Windows.Forms.TextBox();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -66,25 +77,14 @@
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.collapseAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.expandAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.PanelSearch = new System.Windows.Forms.Panel();
-            this.BtnNextSearch = new System.Windows.Forms.Button();
-            this.BtnPrevSearch = new System.Windows.Forms.Button();
-            this.BtnCloseSearch = new System.Windows.Forms.Button();
-            this.TxtSearch = new System.Windows.Forms.TextBox();
-            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toggleCollapseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.ClipList = new System.Windows.Forms.DataGridView();
-            this.ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Title = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Timestamp = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Type = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.SplitPanel)).BeginInit();
             this.SplitPanel.Panel1.SuspendLayout();
             this.SplitPanel.Panel2.SuspendLayout();
             this.SplitPanel.SuspendLayout();
-            this.menuStrip1.SuspendLayout();
-            this.PanelSearch.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ClipList)).BeginInit();
+            this.PanelSearch.SuspendLayout();
+            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // SplitPanel
@@ -107,6 +107,54 @@
             this.SplitPanel.SplitterWidth = 10;
             this.SplitPanel.TabIndex = 1;
             // 
+            // ClipList
+            // 
+            this.ClipList.AllowUserToAddRows = false;
+            this.ClipList.AllowUserToResizeRows = false;
+            this.ClipList.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.ClipList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.ClipList.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.ID,
+            this.Title,
+            this.Timestamp,
+            this.Type});
+            this.ClipList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ClipList.Location = new System.Drawing.Point(0, 20);
+            this.ClipList.MultiSelect = false;
+            this.ClipList.Name = "ClipList";
+            this.ClipList.ReadOnly = true;
+            this.ClipList.RowHeadersVisible = false;
+            this.ClipList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.ClipList.Size = new System.Drawing.Size(261, 741);
+            this.ClipList.TabIndex = 1;
+            this.ClipList.SelectionChanged += new System.EventHandler(this.ClipList_SelectionChanged);
+            // 
+            // ID
+            // 
+            this.ID.HeaderText = "ID";
+            this.ID.Name = "ID";
+            this.ID.ReadOnly = true;
+            this.ID.Visible = false;
+            // 
+            // Title
+            // 
+            this.Title.HeaderText = "Title";
+            this.Title.Name = "Title";
+            this.Title.ReadOnly = true;
+            // 
+            // Timestamp
+            // 
+            this.Timestamp.HeaderText = "Timestamp";
+            this.Timestamp.Name = "Timestamp";
+            this.Timestamp.ReadOnly = true;
+            // 
+            // Type
+            // 
+            this.Type.HeaderText = "Type";
+            this.Type.Name = "Type";
+            this.Type.ReadOnly = true;
+            this.Type.Visible = false;
+            // 
             // textBox1
             // 
             this.textBox1.Dock = System.Windows.Forms.DockStyle.Top;
@@ -114,6 +162,79 @@
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(261, 20);
             this.textBox1.TabIndex = 0;
+            // 
+            // PanelSearch
+            // 
+            this.PanelSearch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.PanelSearch.BackColor = System.Drawing.Color.White;
+            this.PanelSearch.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.PanelSearch.Controls.Add(this.BtnNextSearch);
+            this.PanelSearch.Controls.Add(this.BtnPrevSearch);
+            this.PanelSearch.Controls.Add(this.BtnCloseSearch);
+            this.PanelSearch.Controls.Add(this.TxtSearch);
+            this.PanelSearch.Location = new System.Drawing.Point(206, 68);
+            this.PanelSearch.Name = "PanelSearch";
+            this.PanelSearch.Size = new System.Drawing.Size(292, 40);
+            this.PanelSearch.TabIndex = 11;
+            this.PanelSearch.Visible = false;
+            // 
+            // BtnNextSearch
+            // 
+            this.BtnNextSearch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.BtnNextSearch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnNextSearch.ForeColor = System.Drawing.Color.White;
+            this.BtnNextSearch.Image = ((System.Drawing.Image)(resources.GetObject("BtnNextSearch.Image")));
+            this.BtnNextSearch.Location = new System.Drawing.Point(233, 4);
+            this.BtnNextSearch.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.BtnNextSearch.Name = "BtnNextSearch";
+            this.BtnNextSearch.Size = new System.Drawing.Size(25, 30);
+            this.BtnNextSearch.TabIndex = 9;
+            this.BtnNextSearch.Tag = "Find next (Enter)";
+            this.BtnNextSearch.UseVisualStyleBackColor = true;
+            this.BtnNextSearch.Click += new System.EventHandler(this.BtnNextSearch_Click);
+            // 
+            // BtnPrevSearch
+            // 
+            this.BtnPrevSearch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.BtnPrevSearch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnPrevSearch.ForeColor = System.Drawing.Color.White;
+            this.BtnPrevSearch.Image = ((System.Drawing.Image)(resources.GetObject("BtnPrevSearch.Image")));
+            this.BtnPrevSearch.Location = new System.Drawing.Point(205, 4);
+            this.BtnPrevSearch.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.BtnPrevSearch.Name = "BtnPrevSearch";
+            this.BtnPrevSearch.Size = new System.Drawing.Size(25, 30);
+            this.BtnPrevSearch.TabIndex = 8;
+            this.BtnPrevSearch.Tag = "Find previous (Shift+Enter)";
+            this.BtnPrevSearch.UseVisualStyleBackColor = true;
+            this.BtnPrevSearch.Click += new System.EventHandler(this.BtnPrevSearch_Click);
+            // 
+            // BtnCloseSearch
+            // 
+            this.BtnCloseSearch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.BtnCloseSearch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnCloseSearch.ForeColor = System.Drawing.Color.White;
+            this.BtnCloseSearch.Image = ((System.Drawing.Image)(resources.GetObject("BtnCloseSearch.Image")));
+            this.BtnCloseSearch.Location = new System.Drawing.Point(261, 4);
+            this.BtnCloseSearch.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.BtnCloseSearch.Name = "BtnCloseSearch";
+            this.BtnCloseSearch.Size = new System.Drawing.Size(25, 30);
+            this.BtnCloseSearch.TabIndex = 7;
+            this.BtnCloseSearch.Tag = "Close (Esc)";
+            this.BtnCloseSearch.UseVisualStyleBackColor = true;
+            this.BtnCloseSearch.Click += new System.EventHandler(this.BtnClearSearch_Click);
+            // 
+            // TxtSearch
+            // 
+            this.TxtSearch.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.TxtSearch.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.TxtSearch.Font = new System.Drawing.Font("Segoe UI", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.TxtSearch.Location = new System.Drawing.Point(10, 6);
+            this.TxtSearch.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.TxtSearch.Name = "TxtSearch";
+            this.TxtSearch.Size = new System.Drawing.Size(189, 25);
+            this.TxtSearch.TabIndex = 6;
+            this.TxtSearch.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TxtSearch_KeyDown);
             // 
             // ClipTitle
             // 
@@ -150,9 +271,16 @@
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(152, 24);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(121, 24);
             this.openToolStripMenuItem.Text = "Open...";
             this.openToolStripMenuItem.Visible = false;
+            // 
+            // exitToolStripMenuItem
+            // 
+            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(121, 24);
+            this.exitToolStripMenuItem.Text = "Exit";
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
             // editToolStripMenuItem
             // 
@@ -403,135 +531,12 @@
             this.expandAllToolStripMenuItem.Text = "Expand All";
             this.expandAllToolStripMenuItem.Click += new System.EventHandler(this.expandAllToolStripMenuItem_Click);
             // 
-            // PanelSearch
-            // 
-            this.PanelSearch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.PanelSearch.BackColor = System.Drawing.Color.White;
-            this.PanelSearch.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.PanelSearch.Controls.Add(this.BtnNextSearch);
-            this.PanelSearch.Controls.Add(this.BtnPrevSearch);
-            this.PanelSearch.Controls.Add(this.BtnCloseSearch);
-            this.PanelSearch.Controls.Add(this.TxtSearch);
-            this.PanelSearch.Location = new System.Drawing.Point(218, 68);
-            this.PanelSearch.Name = "PanelSearch";
-            this.PanelSearch.Size = new System.Drawing.Size(292, 40);
-            this.PanelSearch.TabIndex = 11;
-            this.PanelSearch.Visible = false;
-            // 
-            // BtnNextSearch
-            // 
-            this.BtnNextSearch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.BtnNextSearch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnNextSearch.ForeColor = System.Drawing.Color.White;
-            this.BtnNextSearch.Image = ((System.Drawing.Image)(resources.GetObject("BtnNextSearch.Image")));
-            this.BtnNextSearch.Location = new System.Drawing.Point(233, 4);
-            this.BtnNextSearch.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.BtnNextSearch.Name = "BtnNextSearch";
-            this.BtnNextSearch.Size = new System.Drawing.Size(25, 30);
-            this.BtnNextSearch.TabIndex = 9;
-            this.BtnNextSearch.Tag = "Find next (Enter)";
-            this.BtnNextSearch.UseVisualStyleBackColor = true;
-            this.BtnNextSearch.Click += new System.EventHandler(this.BtnNextSearch_Click);
-            // 
-            // BtnPrevSearch
-            // 
-            this.BtnPrevSearch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.BtnPrevSearch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnPrevSearch.ForeColor = System.Drawing.Color.White;
-            this.BtnPrevSearch.Image = ((System.Drawing.Image)(resources.GetObject("BtnPrevSearch.Image")));
-            this.BtnPrevSearch.Location = new System.Drawing.Point(205, 4);
-            this.BtnPrevSearch.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.BtnPrevSearch.Name = "BtnPrevSearch";
-            this.BtnPrevSearch.Size = new System.Drawing.Size(25, 30);
-            this.BtnPrevSearch.TabIndex = 8;
-            this.BtnPrevSearch.Tag = "Find previous (Shift+Enter)";
-            this.BtnPrevSearch.UseVisualStyleBackColor = true;
-            this.BtnPrevSearch.Click += new System.EventHandler(this.BtnPrevSearch_Click);
-            // 
-            // BtnCloseSearch
-            // 
-            this.BtnCloseSearch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.BtnCloseSearch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnCloseSearch.ForeColor = System.Drawing.Color.White;
-            this.BtnCloseSearch.Image = ((System.Drawing.Image)(resources.GetObject("BtnCloseSearch.Image")));
-            this.BtnCloseSearch.Location = new System.Drawing.Point(261, 4);
-            this.BtnCloseSearch.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.BtnCloseSearch.Name = "BtnCloseSearch";
-            this.BtnCloseSearch.Size = new System.Drawing.Size(25, 30);
-            this.BtnCloseSearch.TabIndex = 7;
-            this.BtnCloseSearch.Tag = "Close (Esc)";
-            this.BtnCloseSearch.UseVisualStyleBackColor = true;
-            this.BtnCloseSearch.Click += new System.EventHandler(this.BtnClearSearch_Click);
-            // 
-            // TxtSearch
-            // 
-            this.TxtSearch.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.TxtSearch.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.TxtSearch.Font = new System.Drawing.Font("Segoe UI", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.TxtSearch.Location = new System.Drawing.Point(10, 6);
-            this.TxtSearch.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.TxtSearch.Name = "TxtSearch";
-            this.TxtSearch.Size = new System.Drawing.Size(189, 25);
-            this.TxtSearch.TabIndex = 6;
-            this.TxtSearch.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TxtSearch_KeyDown);
-            // 
-            // exitToolStripMenuItem
-            // 
-            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 24);
-            this.exitToolStripMenuItem.Text = "Exit";
-            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
-            // 
             // toggleCollapseToolStripMenuItem
             // 
             this.toggleCollapseToolStripMenuItem.Name = "toggleCollapseToolStripMenuItem";
             this.toggleCollapseToolStripMenuItem.Size = new System.Drawing.Size(45, 23);
             this.toggleCollapseToolStripMenuItem.Text = "[<-]";
             this.toggleCollapseToolStripMenuItem.Click += new System.EventHandler(this.toggleCollapseToolStripMenuItem_Click);
-            // 
-            // ClipList
-            // 
-            this.ClipList.AllowUserToAddRows = false;
-            this.ClipList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.ClipList.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.ID,
-            this.Title,
-            this.Timestamp,
-            this.Type});
-            this.ClipList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ClipList.Location = new System.Drawing.Point(0, 20);
-            this.ClipList.Name = "ClipList";
-            this.ClipList.ReadOnly = true;
-            this.ClipList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.ClipList.Size = new System.Drawing.Size(261, 741);
-            this.ClipList.TabIndex = 1;
-            // 
-            // ID
-            // 
-            this.ID.HeaderText = "ID";
-            this.ID.Name = "ID";
-            this.ID.ReadOnly = true;
-            this.ID.Visible = false;
-            // 
-            // Title
-            // 
-            this.Title.HeaderText = "Title";
-            this.Title.Name = "Title";
-            this.Title.ReadOnly = true;
-            // 
-            // Timestamp
-            // 
-            this.Timestamp.HeaderText = "Timestamp";
-            this.Timestamp.Name = "Timestamp";
-            this.Timestamp.ReadOnly = true;
-            // 
-            // Type
-            // 
-            this.Type.HeaderText = "Type";
-            this.Type.Name = "Type";
-            this.Type.ReadOnly = true;
-            this.Type.Visible = false;
             // 
             // MainForm
             // 
@@ -549,11 +554,11 @@
             this.SplitPanel.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.SplitPanel)).EndInit();
             this.SplitPanel.ResumeLayout(false);
-            this.menuStrip1.ResumeLayout(false);
-            this.menuStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ClipList)).EndInit();
             this.PanelSearch.ResumeLayout(false);
             this.PanelSearch.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.ClipList)).EndInit();
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
