@@ -41,24 +41,14 @@ namespace MultiClipboardDeluxePro
 
 
             TextArea.TextChanged += (this.OnTextChanged);
+            TextArea.LostFocus += (this.OnLostFocus);
 
             // INITIAL VIEW CONFIG
             TextArea.WrapMode = WrapMode.None;
             TextArea.IndentationGuides = IndentView.LookBoth;
+            TextArea.MarginClick += TextArea_MarginClick;
 
-
-            // STYLING
-            InitColors();
-            InitSyntaxColoring();
-
-            // NUMBER MARGIN
-            InitNumberMargin();
-
-            // BOOKMARK MARGIN
-            InitBookmarkMargin();
-
-            // CODE FOLDING MARGIN
-            InitCodeFolding();
+            SetSyntaxHilighting("C#");
 
             // DRAG DROP
             InitDragDropFile();
@@ -88,7 +78,7 @@ namespace MultiClipboardDeluxePro
                 var clip = new Data.Clip()
                 {
                     Data = ClipMonitor.ClipboardText,
-                    Title = ClipTitle.Text,
+                    Title = "Untitled",
                     Timestamp = DateTime.Now,
                     Type = "C#"
                 };
@@ -99,6 +89,8 @@ namespace MultiClipboardDeluxePro
 
                 ClipList.Rows.Insert(0, new string[] { clip.ID.ToString(), clip.Title, clip.Timestamp.ToString("G"), clip.Type });
                 TextArea.Text = ClipMonitor.ClipboardText;
+                //ClipList.CurrentCell = ClipList.Rows[0].Cells[0];
+                ClipList.Rows[0].Selected = true;
             }
         }
 
@@ -111,6 +103,7 @@ namespace MultiClipboardDeluxePro
                 var Clip = db.Clips.Where(c => c.ID == ID).First();
                 IsMCDPSet = true;
                 TextArea.Text = Clip.Data;
+                SetSyntaxHilighting(Clip.Type);
                 ClipTitle.Text = Clip.Title;
                 Clipboard.SetText(Clip.Data, TextDataFormat.Text);
                 IsMCDPSet = false;
@@ -147,14 +140,73 @@ namespace MultiClipboardDeluxePro
             }
         }
 
-        private void InitColors()
+        private void ClipType_Leave(object sender, EventArgs e)
         {
-
-            TextArea.SetSelectionBackColor(true, IntToColor(0x114D9C));
-
+            if (ClipList.RowCount > 0)
+            {
+                ClipList.SelectedRows[0].Cells["Type"].Value = ClipType.Text;
+                string strID = ClipList.SelectedRows[0].Cells[0].Value.ToString();
+                long ID = long.Parse(strID);
+                var clip = db.Clips.Where(c => c.ID == ID).First();
+                clip.Type = ClipType.Text;
+                db.SaveChanges();
+            }
         }
 
-        
+        private void ClipType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            SetSyntaxHilighting(ClipType.Text);
+        }
+
+        private void SetSyntaxHilighting(string Type)
+        {
+            InitColors();
+
+            if (Type == "XML" || Type == "HTML")
+            {
+                InitSyntaxColoringXML();
+            }
+            else
+            {
+                InitSyntaxColoring();
+            }
+
+            if(Type == "C#")
+            {
+                TextArea.SetKeywords(0, "class extends implements import interface new case do while else if for in switch throw get set function var try catch finally while with default break continue delete return each const namespace package include use is as instanceof typeof author copy default deprecated eventType example exampleText exception haxe inheritDoc internal link mtasc mxmlc param private return see serial serialData serialField since throws usage version langversion playerversion productversion dynamic private public partial static intrinsic internal native override protected AS3 final super this arguments null Infinity NaN undefined true false abstract as base bool break by byte case catch char checked class const continue decimal default delegate do double descending explicit event extern else enum false finally fixed float for foreach from goto group if implicit in int interface internal into is lock long new null namespace object operator out override orderby params private protected public readonly ref return switch struct sbyte sealed short sizeof stackalloc static string select this throw true try typeof uint ulong unchecked unsafe ushort using var virtual volatile void while where yield");
+                TextArea.SetKeywords(1, "void Null ArgumentError arguments Array Boolean Class Date DefinitionError Error EvalError Function int Math Namespace Number Object RangeError ReferenceError RegExp SecurityError String SyntaxError TypeError uint XML XMLList Boolean Byte Char DateTime Decimal Double Int16 Int32 Int64 IntPtr SByte Single UInt16 UInt32 UInt64 UIntPtr Void Path File System Windows Forms ScintillaNET");
+            } else if( Type == "Javascript")
+            {
+                TextArea.SetKeywords(0, "abstract async await boolean break byte case catch char class const continue debugger default delete do double else enum export extends final finally float for from function goto if implements import in instanceof int interface let long native new null of package private protected public return short static super switch synchronized this throw throws transient try typeof var void volatile while with true false prototype yield");
+            } else if(Type == "JSON")
+            {
+                TextArea.SetKeywords(0, "false null true");
+            } 
+
+            // NUMBER MARGIN
+            InitNumberMargin();
+
+            // BOOKMARK MARGIN
+            InitBookmarkMargin();
+
+            // CODE FOLDING MARGIN
+            InitCodeFolding();
+
+            if (Type == "XML" || Type == "HTML")
+            {
+                TextArea.SetProperty("fold.html", "1");
+            }
+            else
+            {
+                TextArea.SetProperty("fold.html", "0");
+            }
+            ClipType.Text = Type;
+        }
+
+        private void InitColors()
+        {
+            TextArea.SetSelectionBackColor(true, IntToColor(0x114D9C));
+        }
 
 
 		private void InitHotkeys() {
@@ -211,8 +263,7 @@ namespace MultiClipboardDeluxePro
 
 			TextArea.Lexer = Lexer.Cpp;
 
-			TextArea.SetKeywords(0, "class extends implements import interface new case do while else if for in switch throw get set function var try catch finally while with default break continue delete return each const namespace package include use is as instanceof typeof author copy default deprecated eventType example exampleText exception haxe inheritDoc internal link mtasc mxmlc param private return see serial serialData serialField since throws usage version langversion playerversion productversion dynamic private public partial static intrinsic internal native override protected AS3 final super this arguments null Infinity NaN undefined true false abstract as base bool break by byte case catch char checked class const continue decimal default delegate do double descending explicit event extern else enum false finally fixed float for foreach from goto group if implicit in int interface internal into is lock long new null namespace object operator out override orderby params private protected public readonly ref return switch struct sbyte sealed short sizeof stackalloc static string select this throw true try typeof uint ulong unchecked unsafe ushort using var virtual volatile void while where yield");
-			TextArea.SetKeywords(1, "void Null ArgumentError arguments Array Boolean Class Date DefinitionError Error EvalError Function int Math Namespace Number Object RangeError ReferenceError RegExp SecurityError String SyntaxError TypeError uint XML XMLList Boolean Byte Char DateTime Decimal Double Int16 Int32 Int64 IntPtr SByte Single UInt16 UInt32 UInt64 UIntPtr Void Path File System Windows Forms ScintillaNET");
+
             //TextArea.SetProperty("fold.html", "0");
         }
 
@@ -242,14 +293,27 @@ namespace MultiClipboardDeluxePro
 		private void OnTextChanged(object sender, EventArgs e) {
 
 		}
-		
 
-		#region Numbers, Bookmarks, Code Folding
+        private void OnLostFocus(object sender, EventArgs e)
+        {
+            if (ClipList.RowCount > 0)
+            {
+                string strID = ClipList.SelectedRows[0].Cells[0].Value.ToString();
+                long ID = long.Parse(strID);
+                var clip = db.Clips.Where(c => c.ID == ID).First();
+                clip.Data = TextArea.Text;
+                db.SaveChanges();
+            }
+        }
+        
 
-		/// <summary>
-		/// the background color of the text area
-		/// </summary>
-		private const int BACK_COLOR = 0x2A211C;
+
+        #region Numbers, Bookmarks, Code Folding
+
+        /// <summary>
+        /// the background color of the text area
+        /// </summary>
+        private const int BACK_COLOR = 0x2A211C;
 
 		/// <summary>
 		/// default text color of the text area
@@ -290,7 +354,7 @@ namespace MultiClipboardDeluxePro
 			nums.Sensitive = true;
 			nums.Mask = 0;
 
-			TextArea.MarginClick += TextArea_MarginClick;
+
 		}
 
 		private void InitBookmarkMargin() {
@@ -695,18 +759,12 @@ namespace MultiClipboardDeluxePro
 
 
 
+
+
+
+
         #endregion
 
-        private void ClipType_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if(ClipType.Text == "C#")
-            {
-                InitSyntaxColoring();
-            }
-            else if(ClipType.Text == "HTML")
-            {
-                InitSyntaxColoringXML();
-            }
-        }
+
     }
 }
