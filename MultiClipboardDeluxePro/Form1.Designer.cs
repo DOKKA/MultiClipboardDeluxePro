@@ -78,6 +78,7 @@
             this.collapseAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.expandAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toggleCollapseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ClipType = new System.Windows.Forms.ToolStripComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.SplitPanel)).BeginInit();
             this.SplitPanel.Panel1.SuspendLayout();
             this.SplitPanel.Panel2.SuspendLayout();
@@ -243,6 +244,8 @@
             this.ClipTitle.Name = "ClipTitle";
             this.ClipTitle.Size = new System.Drawing.Size(507, 20);
             this.ClipTitle.TabIndex = 0;
+            this.ClipTitle.KeyUp += new System.Windows.Forms.KeyEventHandler(this.ClipTitle_KeyUp);
+            this.ClipTitle.Leave += new System.EventHandler(this.ClipTitle_Leave);
             // 
             // menuStrip1
             // 
@@ -253,7 +256,8 @@
             this.editToolStripMenuItem,
             this.searchToolStripMenuItem,
             this.viewToolStripMenuItem,
-            this.toggleCollapseToolStripMenuItem});
+            this.toggleCollapseToolStripMenuItem,
+            this.ClipType});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(784, 27);
@@ -539,6 +543,17 @@
             this.toggleCollapseToolStripMenuItem.Text = "[<-]";
             this.toggleCollapseToolStripMenuItem.Click += new System.EventHandler(this.toggleCollapseToolStripMenuItem_Click);
             // 
+            // ClipType
+            // 
+            this.ClipType.Items.AddRange(new object[] {
+            "C#",
+            "Javascript",
+            "JSON",
+            "XML",
+            "Text"});
+            this.ClipType.Name = "ClipType";
+            this.ClipType.Size = new System.Drawing.Size(121, 23);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -615,6 +630,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Title;
         private System.Windows.Forms.DataGridViewTextBoxColumn Timestamp;
         private System.Windows.Forms.DataGridViewTextBoxColumn Type;
+        private System.Windows.Forms.ToolStripComboBox ClipType;
     }
 }
 

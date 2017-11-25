@@ -108,10 +108,11 @@ namespace MultiClipboardDeluxePro
             {
                 string strID = ClipList.SelectedRows[0].Cells[0].Value.ToString();
                 long ID = long.Parse(strID);
-                string ClipData = db.Clips.Where(c => c.ID == ID).First().Data;
+                var Clip = db.Clips.Where(c => c.ID == ID).First();
                 IsMCDPSet = true;
-                TextArea.Text = ClipData;
-                Clipboard.SetText(ClipData, TextDataFormat.Text);
+                TextArea.Text = Clip.Data;
+                ClipTitle.Text = Clip.Title;
+                Clipboard.SetText(Clip.Data, TextDataFormat.Text);
                 IsMCDPSet = false;
             }
         }
@@ -123,6 +124,27 @@ namespace MultiClipboardDeluxePro
             var clip = db.Clips.Where(c => c.ID == ID).First();
             db.Clips.Remove(clip);
             db.SaveChanges();
+        }
+
+        private void ClipTitle_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (ClipList.RowCount > 0)
+            {
+                ClipList.SelectedRows[0].Cells["Title"].Value = ClipTitle.Text;
+            }
+        }
+
+        private void ClipTitle_Leave(object sender, EventArgs e)
+        {
+            if (ClipList.RowCount > 0)
+            {
+                ClipList.SelectedRows[0].Cells["Title"].Value = ClipTitle.Text;
+                string strID = ClipList.SelectedRows[0].Cells[0].Value.ToString();
+                long ID = long.Parse(strID);
+                var clip = db.Clips.Where(c => c.ID == ID).First();
+                clip.Title = ClipTitle.Text;
+                db.SaveChanges();
+            }
         }
 
         private void InitColors()
@@ -193,6 +215,67 @@ namespace MultiClipboardDeluxePro
 			TextArea.SetKeywords(1, "void Null ArgumentError arguments Array Boolean Class Date DefinitionError Error EvalError Function int Math Namespace Number Object RangeError ReferenceError RegExp SecurityError String SyntaxError TypeError uint XML XMLList Boolean Byte Char DateTime Decimal Double Int16 Int32 Int64 IntPtr SByte Single UInt16 UInt32 UInt64 UIntPtr Void Path File System Windows Forms ScintillaNET");
 
 		}
+
+        private void InitSyntaxColoringXML()
+        {
+            // Reset the styles
+            TextArea.StyleResetDefault();
+            TextArea.Styles[Style.Default].Font = "Consolas";
+            TextArea.Styles[Style.Default].Size = 10;
+            TextArea.StyleClearAll();
+
+            // Set the XML Lexer
+            TextArea.Lexer = Lexer.Xml;
+
+            // Show line numbers
+            TextArea.Margins[0].Width = 20;
+
+            // Enable folding
+            TextArea.SetProperty("fold", "1");
+            TextArea.SetProperty("fold.compact", "1");
+            TextArea.SetProperty("fold.html", "1");
+
+            // Use Margin 2 for fold markers
+            TextArea.Margins[2].Type = MarginType.Symbol;
+            TextArea.Margins[2].Mask = Marker.MaskFolders;
+            TextArea.Margins[2].Sensitive = true;
+            TextArea.Margins[2].Width = 20;
+
+            // Reset folder markers
+            for (int i = Marker.FolderEnd; i <= Marker.FolderOpen; i++)
+            {
+                TextArea.Markers[i].SetForeColor(SystemColors.ControlLightLight);
+                TextArea.Markers[i].SetBackColor(SystemColors.ControlDark);
+            }
+
+            // Style the folder markers
+            TextArea.Markers[Marker.Folder].Symbol = MarkerSymbol.BoxPlus;
+            TextArea.Markers[Marker.Folder].SetBackColor(SystemColors.ControlText);
+            TextArea.Markers[Marker.FolderOpen].Symbol = MarkerSymbol.BoxMinus;
+            TextArea.Markers[Marker.FolderEnd].Symbol = MarkerSymbol.BoxPlusConnected;
+            TextArea.Markers[Marker.FolderEnd].SetBackColor(SystemColors.ControlText);
+            TextArea.Markers[Marker.FolderMidTail].Symbol = MarkerSymbol.TCorner;
+            TextArea.Markers[Marker.FolderOpenMid].Symbol = MarkerSymbol.BoxMinusConnected;
+            TextArea.Markers[Marker.FolderSub].Symbol = MarkerSymbol.VLine;
+            TextArea.Markers[Marker.FolderTail].Symbol = MarkerSymbol.LCorner;
+
+            // Enable automatic folding
+            TextArea.AutomaticFold = AutomaticFold.Show | AutomaticFold.Click | AutomaticFold.Change;
+
+            // Set the Styles
+            TextArea.StyleResetDefault();
+            // I like fixed font for XML
+            TextArea.Styles[Style.Default].Font = "Courier";
+            TextArea.Styles[Style.Default].Size = 10;
+            TextArea.StyleClearAll();
+            TextArea.Styles[Style.Xml.Attribute].ForeColor = Color.Red;
+            TextArea.Styles[Style.Xml.Entity].ForeColor = Color.Red;
+            TextArea.Styles[Style.Xml.Comment].ForeColor = Color.Green;
+            TextArea.Styles[Style.Xml.Tag].ForeColor = Color.Blue;
+            TextArea.Styles[Style.Xml.TagEnd].ForeColor = Color.Blue;
+            TextArea.Styles[Style.Xml.DoubleString].ForeColor = Color.DeepPink;
+            TextArea.Styles[Style.Xml.SingleString].ForeColor = Color.DeepPink;
+        }
 
 		private void OnTextChanged(object sender, EventArgs e) {
 
@@ -639,6 +722,8 @@ namespace MultiClipboardDeluxePro
 				action.Invoke();
 			}
 		}
+
+
 
 
 
