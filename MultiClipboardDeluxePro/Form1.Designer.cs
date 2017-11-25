@@ -79,6 +79,7 @@
             this.expandAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toggleCollapseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ClipType = new System.Windows.Forms.ToolStripComboBox();
+            this.disableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.SplitPanel)).BeginInit();
             this.SplitPanel.Panel1.SuspendLayout();
             this.SplitPanel.Panel2.SuspendLayout();
@@ -104,7 +105,7 @@
             this.SplitPanel.Panel2.Controls.Add(this.PanelSearch);
             this.SplitPanel.Panel2.Controls.Add(this.ClipTitle);
             this.SplitPanel.Size = new System.Drawing.Size(784, 761);
-            this.SplitPanel.SplitterDistance = 261;
+            this.SplitPanel.SplitterDistance = 250;
             this.SplitPanel.SplitterWidth = 10;
             this.SplitPanel.TabIndex = 1;
             // 
@@ -126,7 +127,7 @@
             this.ClipList.ReadOnly = true;
             this.ClipList.RowHeadersVisible = false;
             this.ClipList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.ClipList.Size = new System.Drawing.Size(261, 741);
+            this.ClipList.Size = new System.Drawing.Size(250, 741);
             this.ClipList.TabIndex = 1;
             this.ClipList.SelectionChanged += new System.EventHandler(this.ClipList_SelectionChanged);
             this.ClipList.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.ClipList_UserDeletingRow);
@@ -162,7 +163,7 @@
             this.textBox1.Dock = System.Windows.Forms.DockStyle.Top;
             this.textBox1.Location = new System.Drawing.Point(0, 0);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(261, 20);
+            this.textBox1.Size = new System.Drawing.Size(250, 20);
             this.textBox1.TabIndex = 0;
             // 
             // PanelSearch
@@ -174,7 +175,7 @@
             this.PanelSearch.Controls.Add(this.BtnPrevSearch);
             this.PanelSearch.Controls.Add(this.BtnCloseSearch);
             this.PanelSearch.Controls.Add(this.TxtSearch);
-            this.PanelSearch.Location = new System.Drawing.Point(200, 68);
+            this.PanelSearch.Location = new System.Drawing.Point(205, 68);
             this.PanelSearch.Name = "PanelSearch";
             this.PanelSearch.Size = new System.Drawing.Size(292, 40);
             this.PanelSearch.TabIndex = 11;
@@ -257,6 +258,7 @@
             this.searchToolStripMenuItem,
             this.viewToolStripMenuItem,
             this.toggleCollapseToolStripMenuItem,
+            this.disableToolStripMenuItem,
             this.ClipType});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
@@ -557,6 +559,13 @@
             this.ClipType.SelectedIndexChanged += new System.EventHandler(this.ClipType_SelectedIndexChanged);
             this.ClipType.Leave += new System.EventHandler(this.ClipType_Leave);
             // 
+            // disableToolStripMenuItem
+            // 
+            this.disableToolStripMenuItem.Name = "disableToolStripMenuItem";
+            this.disableToolStripMenuItem.Size = new System.Drawing.Size(83, 23);
+            this.disableToolStripMenuItem.Text = "RUNNING";
+            this.disableToolStripMenuItem.Click += new System.EventHandler(this.disableToolStripMenuItem_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -634,6 +643,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Timestamp;
         private System.Windows.Forms.DataGridViewTextBoxColumn Type;
         private System.Windows.Forms.ToolStripComboBox ClipType;
+        private System.Windows.Forms.ToolStripMenuItem disableToolStripMenuItem;
     }
 }
 

@@ -25,9 +25,17 @@ namespace MultiClipboardDeluxePro
         ClipboardMonitor.ClipboardMonitor ClipMonitor;
         Data.DBContext db;
         bool IsMCDPSet = false;
+        bool IsDisabled = false;
+        private string Default_Font = "Consolas";
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+            //I'm opinionated about fonts...
+            if (IsFontInstalled("Source Code Pro"))
+            {
+                Default_Font = "Source Code Pro";
+            }
+
             SplitPanel.BringToFront();
             // CREATE CONTROL
             TextArea = new ScintillaNET.Scintilla();
@@ -73,7 +81,7 @@ namespace MultiClipboardDeluxePro
         private void Cm_ClipboardData(object sender, System.Windows.RoutedEventArgs e)
         {
             //only add new clip if the type is text and the program isn't setting the clipboard
-            if (ClipMonitor.ClipboardContainsText && !IsMCDPSet)
+            if (ClipMonitor.ClipboardContainsText && !IsMCDPSet && !IsDisabled)
             {
                 var clip = new Data.Clip()
                 {
@@ -236,7 +244,7 @@ namespace MultiClipboardDeluxePro
 
 			// Configure the default style
 			TextArea.StyleResetDefault();
-			TextArea.Styles[Style.Default].Font = "Consolas";
+			TextArea.Styles[Style.Default].Font = Default_Font;
 			TextArea.Styles[Style.Default].Size = 10;
 			TextArea.Styles[Style.Default].BackColor = IntToColor(0x212121);
 			TextArea.Styles[Style.Default].ForeColor = IntToColor(0xFFFFFF);
@@ -271,7 +279,7 @@ namespace MultiClipboardDeluxePro
         {
             // Configure the default style
             TextArea.StyleResetDefault();
-            TextArea.Styles[Style.Default].Font = "Consolas";
+            TextArea.Styles[Style.Default].Font = Default_Font;
             TextArea.Styles[Style.Default].Size = 10;
             TextArea.Styles[Style.Default].BackColor = IntToColor(0x212121);
             TextArea.Styles[Style.Default].ForeColor = IntToColor(0xFFFFFF);
@@ -589,6 +597,19 @@ namespace MultiClipboardDeluxePro
 
         }
 
+        private void disableToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if(disableToolStripMenuItem.Text == "RUNNING")
+            {
+                IsDisabled = true;
+                disableToolStripMenuItem.Text = "STOPPED";
+            } else
+            {
+                IsDisabled = false;
+                disableToolStripMenuItem.Text = "RUNNING";
+            }
+        }
+
 
         #endregion
 
@@ -742,13 +763,25 @@ namespace MultiClipboardDeluxePro
 			return Color.FromArgb(255, (byte)(rgb >> 16), (byte)(rgb >> 8), (byte)rgb);
 		}
 
-		public void InvokeIfNeeded(Action action) {
+        private bool IsFontInstalled(string fontName)
+        {
+            using (var testFont = new Font(fontName, 10))
+            {
+                return 0 == string.Compare(
+                fontName,
+                testFont.Name,
+                StringComparison.InvariantCultureIgnoreCase);
+            }
+        }
+
+        public void InvokeIfNeeded(Action action) {
 			if (this.InvokeRequired) {
 				this.BeginInvoke(action);
 			} else {
 				action.Invoke();
 			}
 		}
+
 
 
 
