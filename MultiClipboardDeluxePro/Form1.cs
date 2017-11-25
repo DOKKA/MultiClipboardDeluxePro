@@ -213,68 +213,30 @@ namespace MultiClipboardDeluxePro
 
 			TextArea.SetKeywords(0, "class extends implements import interface new case do while else if for in switch throw get set function var try catch finally while with default break continue delete return each const namespace package include use is as instanceof typeof author copy default deprecated eventType example exampleText exception haxe inheritDoc internal link mtasc mxmlc param private return see serial serialData serialField since throws usage version langversion playerversion productversion dynamic private public partial static intrinsic internal native override protected AS3 final super this arguments null Infinity NaN undefined true false abstract as base bool break by byte case catch char checked class const continue decimal default delegate do double descending explicit event extern else enum false finally fixed float for foreach from goto group if implicit in int interface internal into is lock long new null namespace object operator out override orderby params private protected public readonly ref return switch struct sbyte sealed short sizeof stackalloc static string select this throw true try typeof uint ulong unchecked unsafe ushort using var virtual volatile void while where yield");
 			TextArea.SetKeywords(1, "void Null ArgumentError arguments Array Boolean Class Date DefinitionError Error EvalError Function int Math Namespace Number Object RangeError ReferenceError RegExp SecurityError String SyntaxError TypeError uint XML XMLList Boolean Byte Char DateTime Decimal Double Int16 Int32 Int64 IntPtr SByte Single UInt16 UInt32 UInt64 UIntPtr Void Path File System Windows Forms ScintillaNET");
-
-		}
+            //TextArea.SetProperty("fold.html", "0");
+        }
 
         private void InitSyntaxColoringXML()
         {
-            // Reset the styles
+            // Configure the default style
             TextArea.StyleResetDefault();
             TextArea.Styles[Style.Default].Font = "Consolas";
             TextArea.Styles[Style.Default].Size = 10;
+            TextArea.Styles[Style.Default].BackColor = IntToColor(0x212121);
+            TextArea.Styles[Style.Default].ForeColor = IntToColor(0xFFFFFF);
+            TextArea.CaretForeColor = IntToColor(0xFFFFFF);
             TextArea.StyleClearAll();
 
-            // Set the XML Lexer
-            TextArea.Lexer = Lexer.Xml;
+            TextArea.Styles[Style.Xml.Attribute].ForeColor = IntToColor(0xBEC89E);
+            TextArea.Styles[Style.Xml.Entity].ForeColor = IntToColor(0xE3CEAB);
+            TextArea.Styles[Style.Xml.Comment].ForeColor = IntToColor(0x7F9F7F);
+            TextArea.Styles[Style.Xml.Tag].ForeColor = IntToColor(0xE3CEAB);
+            TextArea.Styles[Style.Xml.TagEnd].ForeColor = IntToColor(0xE3CEAB);
+            TextArea.Styles[Style.Xml.DoubleString].ForeColor = IntToColor(0xC89191);
+            TextArea.Styles[Style.Xml.SingleString].ForeColor = IntToColor(0xC89191);
 
-            // Show line numbers
-            TextArea.Margins[0].Width = 20;
-
-            // Enable folding
-            TextArea.SetProperty("fold", "1");
-            TextArea.SetProperty("fold.compact", "1");
-            TextArea.SetProperty("fold.html", "1");
-
-            // Use Margin 2 for fold markers
-            TextArea.Margins[2].Type = MarginType.Symbol;
-            TextArea.Margins[2].Mask = Marker.MaskFolders;
-            TextArea.Margins[2].Sensitive = true;
-            TextArea.Margins[2].Width = 20;
-
-            // Reset folder markers
-            for (int i = Marker.FolderEnd; i <= Marker.FolderOpen; i++)
-            {
-                TextArea.Markers[i].SetForeColor(SystemColors.ControlLightLight);
-                TextArea.Markers[i].SetBackColor(SystemColors.ControlDark);
-            }
-
-            // Style the folder markers
-            TextArea.Markers[Marker.Folder].Symbol = MarkerSymbol.BoxPlus;
-            TextArea.Markers[Marker.Folder].SetBackColor(SystemColors.ControlText);
-            TextArea.Markers[Marker.FolderOpen].Symbol = MarkerSymbol.BoxMinus;
-            TextArea.Markers[Marker.FolderEnd].Symbol = MarkerSymbol.BoxPlusConnected;
-            TextArea.Markers[Marker.FolderEnd].SetBackColor(SystemColors.ControlText);
-            TextArea.Markers[Marker.FolderMidTail].Symbol = MarkerSymbol.TCorner;
-            TextArea.Markers[Marker.FolderOpenMid].Symbol = MarkerSymbol.BoxMinusConnected;
-            TextArea.Markers[Marker.FolderSub].Symbol = MarkerSymbol.VLine;
-            TextArea.Markers[Marker.FolderTail].Symbol = MarkerSymbol.LCorner;
-
-            // Enable automatic folding
-            TextArea.AutomaticFold = AutomaticFold.Show | AutomaticFold.Click | AutomaticFold.Change;
-
-            // Set the Styles
-            TextArea.StyleResetDefault();
-            // I like fixed font for XML
-            TextArea.Styles[Style.Default].Font = "Courier";
-            TextArea.Styles[Style.Default].Size = 10;
-            TextArea.StyleClearAll();
-            TextArea.Styles[Style.Xml.Attribute].ForeColor = Color.Red;
-            TextArea.Styles[Style.Xml.Entity].ForeColor = Color.Red;
-            TextArea.Styles[Style.Xml.Comment].ForeColor = Color.Green;
-            TextArea.Styles[Style.Xml.Tag].ForeColor = Color.Blue;
-            TextArea.Styles[Style.Xml.TagEnd].ForeColor = Color.Blue;
-            TextArea.Styles[Style.Xml.DoubleString].ForeColor = Color.DeepPink;
-            TextArea.Styles[Style.Xml.SingleString].ForeColor = Color.DeepPink;
+            TextArea.Lexer = Lexer.Html;
+            //TextArea.SetProperty("fold.html", "1");
         }
 
 		private void OnTextChanged(object sender, EventArgs e) {
@@ -358,9 +320,10 @@ namespace MultiClipboardDeluxePro
 			// Enable code folding
 			TextArea.SetProperty("fold", "1");
 			TextArea.SetProperty("fold.compact", "1");
+            //TextArea.SetProperty("fold.html", "1");
 
-			// Configure a margin to display folding symbols
-			TextArea.Margins[FOLDING_MARGIN].Type = MarginType.Symbol;
+            // Configure a margin to display folding symbols
+            TextArea.Margins[FOLDING_MARGIN].Type = MarginType.Symbol;
 			TextArea.Margins[FOLDING_MARGIN].Mask = Marker.MaskFolders;
 			TextArea.Margins[FOLDING_MARGIN].Sensitive = true;
 			TextArea.Margins[FOLDING_MARGIN].Width = 20;
@@ -731,8 +694,19 @@ namespace MultiClipboardDeluxePro
 
 
 
+
         #endregion
 
-
+        private void ClipType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if(ClipType.Text == "C#")
+            {
+                InitSyntaxColoring();
+            }
+            else if(ClipType.Text == "HTML")
+            {
+                InitSyntaxColoringXML();
+            }
+        }
     }
 }

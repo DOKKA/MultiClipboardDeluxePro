@@ -549,10 +549,11 @@
             "C#",
             "Javascript",
             "JSON",
-            "XML",
+            "HTML",
             "Text"});
             this.ClipType.Name = "ClipType";
             this.ClipType.Size = new System.Drawing.Size(121, 23);
+            this.ClipType.SelectedIndexChanged += new System.EventHandler(this.ClipType_SelectedIndexChanged);
             // 
             // MainForm
             // 
