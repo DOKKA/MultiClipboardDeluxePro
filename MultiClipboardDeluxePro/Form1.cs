@@ -26,6 +26,7 @@ namespace MultiClipboardDeluxePro
         Data.DBContext db;
         bool IsMCDPSet = false;
         bool IsDisabled = false;
+        bool IsAddingClip = false;
         private string Default_Font = "Consolas";
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -98,6 +99,7 @@ namespace MultiClipboardDeluxePro
                 ClipList.Rows.Insert(0, new string[] { clip.ID.ToString(), clip.Title, clip.Timestamp.ToString("G"), clip.Type });
                 TextArea.Text = ClipMonitor.ClipboardText;
                 //ClipList.CurrentCell = ClipList.Rows[0].Cells[0];
+                IsAddingClip = true;
                 ClipList.Rows[0].Selected = true;
             }
         }
@@ -113,7 +115,14 @@ namespace MultiClipboardDeluxePro
                 TextArea.Text = Clip.Data;
                 SetSyntaxHilighting(Clip.Type);
                 ClipTitle.Text = Clip.Title;
-                Clipboard.SetText(Clip.Data, TextDataFormat.Text);
+
+                //if a clip is being added, don't try to add it to the clipboard
+                if (!IsAddingClip)
+                {
+                    Clipboard.SetText(Clip.Data, TextDataFormat.Text);
+                    IsAddingClip = false;
+                }
+                
                 IsMCDPSet = false;
             }
         }
@@ -781,20 +790,6 @@ namespace MultiClipboardDeluxePro
 				action.Invoke();
 			}
 		}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         #endregion
 
