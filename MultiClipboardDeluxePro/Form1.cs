@@ -11,6 +11,7 @@ using ScintillaNET;
 using ScintillaNET.Demo.Utils;
 using System.IO;
 using ClipboardMonitor;
+using MultiClipboardDeluxePro.Data;
 
 namespace MultiClipboardDeluxePro
 {
@@ -24,6 +25,8 @@ namespace MultiClipboardDeluxePro
         ScintillaNET.Scintilla TextArea;
         ClipboardMonitor.ClipboardMonitor ClipMonitor;
         Data.DBContext db;
+        ClipService _clipService;
+
         bool IsMCDPSet = false;
         bool IsDisabled = false;
         bool IsAddingClip = false;
@@ -71,11 +74,12 @@ namespace MultiClipboardDeluxePro
             ClipMonitor = new ClipboardMonitor.ClipboardMonitor();
             ClipMonitor.ClipboardData += Cm_ClipboardData;
             db = new Data.DBContext();
+            _clipService = new ClipService(db);
 
-            var clips = db.Clips.Select(c => new { ID = c.ID, Title = c.Title, Timestamp = c.Timestamp, Type = c.Type }).ToList();
+            var clips = _clipService.GetList();
             foreach(var clip in clips)
             {
-                ClipList.Rows.Insert(0, new string[] { clip.ID.ToString(), clip.Title, clip.Timestamp.ToString("G"), clip.Type });
+                ClipList.Rows.Insert(0, clip);
             }
         }
 
@@ -92,9 +96,7 @@ namespace MultiClipboardDeluxePro
                     Type = "C#"
                 };
 
-
-                db.Clips.Add(clip);
-                db.SaveChanges();
+                _clipService.Create(clip);
 
                 ClipList.Rows.Insert(0, new string[] { clip.ID.ToString(), clip.Title, clip.Timestamp.ToString("G"), clip.Type });
                 TextArea.Text = ClipMonitor.ClipboardText;
@@ -110,7 +112,7 @@ namespace MultiClipboardDeluxePro
             {
                 string strID = ClipList.SelectedRows[0].Cells[0].Value.ToString();
                 long ID = long.Parse(strID);
-                var Clip = db.Clips.Where(c => c.ID == ID).First();
+                var Clip = _clipService.Get(ID);
                 IsMCDPSet = true;
                 TextArea.Text = Clip.Data;
                 SetSyntaxHilighting(Clip.Type);
@@ -131,9 +133,7 @@ namespace MultiClipboardDeluxePro
         {
             string strID = ClipList.SelectedRows[0].Cells[0].Value.ToString();
             long ID = long.Parse(strID);
-            var clip = db.Clips.Where(c => c.ID == ID).First();
-            db.Clips.Remove(clip);
-            db.SaveChanges();
+            _clipService.Delete(ID);
         }
 
         private void ClipTitle_KeyUp(object sender, KeyEventArgs e)
@@ -151,9 +151,7 @@ namespace MultiClipboardDeluxePro
                 ClipList.SelectedRows[0].Cells["Title"].Value = ClipTitle.Text;
                 string strID = ClipList.SelectedRows[0].Cells[0].Value.ToString();
                 long ID = long.Parse(strID);
-                var clip = db.Clips.Where(c => c.ID == ID).First();
-                clip.Title = ClipTitle.Text;
-                db.SaveChanges();
+                _clipService.UpdateTitle(ID, ClipTitle.Text);
             }
         }
 
@@ -164,9 +162,7 @@ namespace MultiClipboardDeluxePro
                 ClipList.SelectedRows[0].Cells["Type"].Value = ClipType.Text;
                 string strID = ClipList.SelectedRows[0].Cells[0].Value.ToString();
                 long ID = long.Parse(strID);
-                var clip = db.Clips.Where(c => c.ID == ID).First();
-                clip.Type = ClipType.Text;
-                db.SaveChanges();
+                _clipService.UpdateType(ID,ClipType.Text);
             }
         }
 
@@ -317,9 +313,7 @@ namespace MultiClipboardDeluxePro
             {
                 string strID = ClipList.SelectedRows[0].Cells[0].Value.ToString();
                 long ID = long.Parse(strID);
-                var clip = db.Clips.Where(c => c.ID == ID).First();
-                clip.Data = TextArea.Text;
-                db.SaveChanges();
+                _clipService.UpdateData(ID, TextArea.Text);
             }
         }
         
