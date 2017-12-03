@@ -163,6 +163,7 @@ namespace MultiClipboardDeluxePro
                 string strID = ClipList.SelectedRows[0].Cells[0].Value.ToString();
                 long ID = long.Parse(strID);
                 _clipService.UpdateType(ID,ClipType.Text);
+
             }
         }
 
