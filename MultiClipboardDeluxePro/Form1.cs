@@ -10,7 +10,6 @@ using System.Windows.Forms;
 using ScintillaNET;
 using ScintillaNET.Demo.Utils;
 using System.IO;
-using ClipboardMonitor;
 using MultiClipboardDeluxePro.Data;
 
 namespace MultiClipboardDeluxePro
@@ -23,7 +22,6 @@ namespace MultiClipboardDeluxePro
         }
 
         Scintilla TextArea;
-        ClipboardMonitor.ClipboardMonitor ClipMonitor;
         ClipService _clipService;
 
         bool IsMCDPSet = false;
@@ -54,6 +52,8 @@ namespace MultiClipboardDeluxePro
             TextArea.TextChanged += (this.OnTextChanged);
             TextArea.LostFocus += (this.OnLostFocus);
 
+            
+
             // INITIAL VIEW CONFIG
             TextArea.WrapMode = WrapMode.None;
             TextArea.IndentationGuides = IndentView.LookBoth;
@@ -64,14 +64,10 @@ namespace MultiClipboardDeluxePro
             // DRAG DROP
             InitDragDropFile();
 
-            // DEFAULT FILE
-            //LoadDataFromFile("../../MainForm.cs");
-
             // INIT HOTKEYS
             InitHotkeys();
+            Utils.ClipboardNotification.ClipboardUpdate += ClipboardNotification_ClipboardUpdate;
 
-            ClipMonitor = new ClipboardMonitor.ClipboardMonitor();
-            ClipMonitor.ClipboardData += Cm_ClipboardData;
             _clipService = new ClipService(new DBContext());
 
             var clips = _clipService.GetList();
@@ -81,14 +77,15 @@ namespace MultiClipboardDeluxePro
             }
         }
 
-        private void Cm_ClipboardData(object sender, System.Windows.RoutedEventArgs e)
+        private void ClipboardNotification_ClipboardUpdate(object sender, EventArgs e)
         {
             //only add new clip if the type is text and the program isn't setting the clipboard
-            if (ClipMonitor.ClipboardContainsText && !IsMCDPSet && !IsDisabled)
+            if (Clipboard.ContainsText() && !IsMCDPSet && !IsDisabled)
             {
+                string clipboardText = Clipboard.GetText(TextDataFormat.Text);
                 var clip = new Clip()
                 {
-                    Data = ClipMonitor.ClipboardText,
+                    Data = clipboardText,
                     Title = "Untitled",
                     Timestamp = DateTime.Now,
                     Type = "C#"
@@ -97,8 +94,7 @@ namespace MultiClipboardDeluxePro
                 _clipService.Create(clip);
 
                 ClipList.Rows.Insert(0, new string[] { clip.ID.ToString(), clip.Title, clip.Timestamp.ToString("G"), clip.Type });
-                TextArea.Text = ClipMonitor.ClipboardText;
-                //ClipList.CurrentCell = ClipList.Rows[0].Cells[0];
+                TextArea.Text = clipboardText;
                 IsAddingClip = true;
                 ClipList.Rows[0].Selected = true;
             }
