@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MultiClipboardDeluxePro.Data
 {
-     class ClipService
+     public class ClipService
     {
         private DBContext db;
 

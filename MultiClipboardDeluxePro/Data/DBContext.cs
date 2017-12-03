@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MultiClipboardDeluxePro.Data
 {
-    class DBContext : DbContext
+    public class DBContext : DbContext
     {
         public DBContext() : base("DefaultConnection")
         {
