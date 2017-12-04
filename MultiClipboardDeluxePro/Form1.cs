@@ -26,11 +26,12 @@ namespace MultiClipboardDeluxePro
 
         bool IsMCDPSet = false;
         bool IsDisabled = false;
-        bool IsAddingClip = false;
         private string Default_Font = "Consolas";
+        string lastClipboardText;
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+            lastClipboardText = Clipboard.GetText();
             //I'm opinionated about fonts...
             if (IsFontInstalled("Source Code Pro"))
             {
@@ -75,14 +76,28 @@ namespace MultiClipboardDeluxePro
             {
                 ClipList.Rows.Insert(0, clip);
             }
+            //IsStartup = false;
+            ClipList.Rows[0].Selected = true;
         }
 
         private void ClipboardNotification_ClipboardUpdate(object sender, EventArgs e)
         {
+            //debounce the windows clipboard event
+            string text = Clipboard.GetText();
+            if(Clipboard.ContainsText() && text != lastClipboardText)
+            {
+                ClipboardChanged();
+                lastClipboardText = text;
+            }
+        }
+
+        private void ClipboardChanged()
+        {
             //only add new clip if the type is text and the program isn't setting the clipboard
-            if (Clipboard.ContainsText() && !IsMCDPSet && !IsDisabled)
+            if (!IsMCDPSet && !IsDisabled)
             {
                 string clipboardText = Clipboard.GetText(TextDataFormat.Text);
+                
                 var clip = new Clip()
                 {
                     Data = clipboardText,
@@ -95,9 +110,9 @@ namespace MultiClipboardDeluxePro
 
                 ClipList.Rows.Insert(0, new string[] { clip.ID.ToString(), clip.Title, clip.Timestamp.ToString("G"), clip.Type });
                 TextArea.Text = clipboardText;
-                IsAddingClip = true;
                 ClipList.Rows[0].Selected = true;
             }
+            IsMCDPSet = false;
         }
 
         private void ClipList_SelectionChanged(object sender, EventArgs e)
@@ -109,15 +124,7 @@ namespace MultiClipboardDeluxePro
                 TextArea.Text = Clip.Data;
                 SetSyntaxHilighting(Clip.Type);
                 ClipTitle.Text = Clip.Title;
-
-                //if a clip is being added, don't try to add it to the clipboard
-                if (!IsAddingClip)
-                {
-                    Clipboard.SetText(Clip.Data, TextDataFormat.Text);
-                    IsAddingClip = false;
-                }
-                
-                IsMCDPSet = false;
+                Clipboard.SetText(Clip.Data, TextDataFormat.Text);
             }
         }
 
