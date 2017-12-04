@@ -93,11 +93,12 @@ namespace MultiClipboardDeluxePro
 
         private void ClipboardChanged()
         {
+            string clipboardText = Clipboard.GetText(TextDataFormat.Text);
             //only add new clip if the type is text and the program isn't setting the clipboard
-            if (!IsMCDPSet && !IsDisabled)
+            //and it's actually has value
+            if (!IsMCDPSet && !IsDisabled && !String.IsNullOrEmpty(clipboardText) && !ClipList.Focused)
             {
-                string clipboardText = Clipboard.GetText(TextDataFormat.Text);
-                
+
                 var clip = new Clip()
                 {
                     Data = clipboardText,
@@ -124,7 +125,11 @@ namespace MultiClipboardDeluxePro
                 TextArea.Text = Clip.Data;
                 SetSyntaxHilighting(Clip.Type);
                 ClipTitle.Text = Clip.Title;
-                Clipboard.SetText(Clip.Data, TextDataFormat.Text);
+                if(!String.IsNullOrEmpty(Clip.Data))
+                {
+                    Clipboard.SetText(Clip.Data, TextDataFormat.Text);
+                }
+                
             }
         }
 
