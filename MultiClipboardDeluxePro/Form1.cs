@@ -10,7 +10,6 @@ using System.Windows.Forms;
 using ScintillaNET;
 using ScintillaNET.Demo.Utils;
 using System.IO;
-using ClipboardMonitor;
 using MultiClipboardDeluxePro.Data;
 
 namespace MultiClipboardDeluxePro
@@ -22,18 +21,17 @@ namespace MultiClipboardDeluxePro
             InitializeComponent();
         }
 
-        ScintillaNET.Scintilla TextArea;
-        ClipboardMonitor.ClipboardMonitor ClipMonitor;
-        Data.DBContext db;
+        Scintilla TextArea;
         ClipService _clipService;
 
         bool IsMCDPSet = false;
         bool IsDisabled = false;
-        bool IsAddingClip = false;
         private string Default_Font = "Consolas";
+        string lastClipboardText;
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+            lastClipboardText = Clipboard.GetText();
             //I'm opinionated about fonts...
             if (IsFontInstalled("Source Code Pro"))
             {
@@ -55,6 +53,8 @@ namespace MultiClipboardDeluxePro
             TextArea.TextChanged += (this.OnTextChanged);
             TextArea.LostFocus += (this.OnLostFocus);
 
+            
+
             // INITIAL VIEW CONFIG
             TextArea.WrapMode = WrapMode.None;
             TextArea.IndentationGuides = IndentView.LookBoth;
@@ -65,32 +65,42 @@ namespace MultiClipboardDeluxePro
             // DRAG DROP
             InitDragDropFile();
 
-            // DEFAULT FILE
-            //LoadDataFromFile("../../MainForm.cs");
-
             // INIT HOTKEYS
             InitHotkeys();
+            Utils.ClipboardNotification.ClipboardUpdate += ClipboardNotification_ClipboardUpdate;
 
-            ClipMonitor = new ClipboardMonitor.ClipboardMonitor();
-            ClipMonitor.ClipboardData += Cm_ClipboardData;
-            db = new Data.DBContext();
-            _clipService = new ClipService(db);
+            _clipService = new ClipService(new DBContext());
 
             var clips = _clipService.GetList();
             foreach(var clip in clips)
             {
                 ClipList.Rows.Insert(0, clip);
             }
+            //IsStartup = false;
+            ClipList.Rows[0].Selected = true;
         }
 
-        private void Cm_ClipboardData(object sender, System.Windows.RoutedEventArgs e)
+        private void ClipboardNotification_ClipboardUpdate(object sender, EventArgs e)
+        {
+            //debounce the windows clipboard event
+            string text = Clipboard.GetText();
+            if(Clipboard.ContainsText() && text != lastClipboardText)
+            {
+                ClipboardChanged();
+                lastClipboardText = text;
+            }
+        }
+
+        private void ClipboardChanged()
         {
             //only add new clip if the type is text and the program isn't setting the clipboard
-            if (ClipMonitor.ClipboardContainsText && !IsMCDPSet && !IsDisabled)
+            if (!IsMCDPSet && !IsDisabled)
             {
-                var clip = new Data.Clip()
+                string clipboardText = Clipboard.GetText(TextDataFormat.Text);
+                
+                var clip = new Clip()
                 {
-                    Data = ClipMonitor.ClipboardText,
+                    Data = clipboardText,
                     Title = "Untitled",
                     Timestamp = DateTime.Now,
                     Type = "C#"
@@ -99,41 +109,28 @@ namespace MultiClipboardDeluxePro
                 _clipService.Create(clip);
 
                 ClipList.Rows.Insert(0, new string[] { clip.ID.ToString(), clip.Title, clip.Timestamp.ToString("G"), clip.Type });
-                TextArea.Text = ClipMonitor.ClipboardText;
-                //ClipList.CurrentCell = ClipList.Rows[0].Cells[0];
-                IsAddingClip = true;
+                TextArea.Text = clipboardText;
                 ClipList.Rows[0].Selected = true;
             }
+            IsMCDPSet = false;
         }
 
         private void ClipList_SelectionChanged(object sender, EventArgs e)
         {
             if(ClipList.RowCount > 0)
             {
-                string strID = ClipList.SelectedRows[0].Cells[0].Value.ToString();
-                long ID = long.Parse(strID);
-                var Clip = _clipService.Get(ID);
+                var Clip = _clipService.Get(GetSelectedClipID());
                 IsMCDPSet = true;
                 TextArea.Text = Clip.Data;
                 SetSyntaxHilighting(Clip.Type);
                 ClipTitle.Text = Clip.Title;
-
-                //if a clip is being added, don't try to add it to the clipboard
-                if (!IsAddingClip)
-                {
-                    Clipboard.SetText(Clip.Data, TextDataFormat.Text);
-                    IsAddingClip = false;
-                }
-                
-                IsMCDPSet = false;
+                Clipboard.SetText(Clip.Data, TextDataFormat.Text);
             }
         }
 
         private void ClipList_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
         {
-            string strID = ClipList.SelectedRows[0].Cells[0].Value.ToString();
-            long ID = long.Parse(strID);
-            _clipService.Delete(ID);
+            _clipService.Delete(GetSelectedClipID());
         }
 
         private void ClipTitle_KeyUp(object sender, KeyEventArgs e)
@@ -149,9 +146,7 @@ namespace MultiClipboardDeluxePro
             if (ClipList.RowCount > 0)
             {
                 ClipList.SelectedRows[0].Cells["Title"].Value = ClipTitle.Text;
-                string strID = ClipList.SelectedRows[0].Cells[0].Value.ToString();
-                long ID = long.Parse(strID);
-                _clipService.UpdateTitle(ID, ClipTitle.Text);
+                _clipService.UpdateTitle(GetSelectedClipID(), ClipTitle.Text);
             }
         }
 
@@ -160,10 +155,7 @@ namespace MultiClipboardDeluxePro
             if (ClipList.RowCount > 0)
             {
                 ClipList.SelectedRows[0].Cells["Type"].Value = ClipType.Text;
-                string strID = ClipList.SelectedRows[0].Cells[0].Value.ToString();
-                long ID = long.Parse(strID);
-                _clipService.UpdateType(ID,ClipType.Text);
-
+                _clipService.UpdateType(GetSelectedClipID(), ClipType.Text);
             }
         }
 
@@ -312,9 +304,7 @@ namespace MultiClipboardDeluxePro
         {
             if (ClipList.RowCount > 0)
             {
-                string strID = ClipList.SelectedRows[0].Cells[0].Value.ToString();
-                long ID = long.Parse(strID);
-                _clipService.UpdateData(ID, TextArea.Text);
+                _clipService.UpdateData(GetSelectedClipID(), TextArea.Text);
             }
         }
         
@@ -785,6 +775,12 @@ namespace MultiClipboardDeluxePro
 				action.Invoke();
 			}
 		}
+
+        private long GetSelectedClipID()
+        {
+            string strID = ClipList.SelectedRows[0].Cells[0].Value.ToString();
+            return long.Parse(strID);
+        }
 
         #endregion
 
