@@ -82,9 +82,12 @@ namespace MultiClipboardDeluxePro
 
         private void ClipboardNotification_ClipboardUpdate(object sender, EventArgs e)
         {
+            //var x = Clipboard.GetDataObject().GetData(DataFormats.OemText);
+            //DataFormats.
             //debounce the windows clipboard event
-            string text = Clipboard.GetText();
-            if(Clipboard.ContainsText() && text != lastClipboardText)
+            string text = Clipboard.GetText(TextDataFormat.UnicodeText);
+            
+            if(Clipboard.ContainsText(TextDataFormat.UnicodeText) && text != lastClipboardText)
             {
                 ClipboardChanged();
                 lastClipboardText = text;
@@ -93,7 +96,8 @@ namespace MultiClipboardDeluxePro
 
         private void ClipboardChanged()
         {
-            string clipboardText = Clipboard.GetText(TextDataFormat.Text);
+            //change this to unicode only?
+            string clipboardText = Clipboard.GetText(TextDataFormat.UnicodeText);
             //only add new clip if the type is text and the program isn't setting the clipboard
             //and it's actually has value
             if (!IsMCDPSet && !IsDisabled && !String.IsNullOrEmpty(clipboardText) && !ClipList.Focused)
@@ -127,7 +131,7 @@ namespace MultiClipboardDeluxePro
                 ClipTitle.Text = Clip.Title;
                 if(!String.IsNullOrEmpty(Clip.Data))
                 {
-                    Clipboard.SetText(Clip.Data, TextDataFormat.Text);
+                    Clipboard.SetText(Clip.Data, TextDataFormat.UnicodeText);
                 }
                 
             }
