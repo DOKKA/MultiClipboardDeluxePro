@@ -122,7 +122,9 @@ namespace MultiClipboardDeluxePro
 
         private void ClipList_SelectionChanged(object sender, EventArgs e)
         {
-            if(ClipList.RowCount > 0)
+            //only run this if there is another row, and if window is active
+            //this way, the clipboard metadata is not immediately erased
+            if (ClipList.RowCount > 0 && MainForm.ActiveForm != null)
             {
                 var Clip = _clipService.Get(GetSelectedClipID());
                 IsMCDPSet = true;
