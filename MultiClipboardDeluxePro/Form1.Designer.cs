@@ -78,8 +78,10 @@
             this.collapseAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.expandAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toggleCollapseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.ClipType = new System.Windows.Forms.ToolStripComboBox();
             this.disableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ClipType = new System.Windows.Forms.ToolStripComboBox();
+            this.formatToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.beautifyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.SplitPanel)).BeginInit();
             this.SplitPanel.Panel1.SuspendLayout();
             this.SplitPanel.Panel2.SuspendLayout();
@@ -175,7 +177,7 @@
             this.PanelSearch.Controls.Add(this.BtnPrevSearch);
             this.PanelSearch.Controls.Add(this.BtnCloseSearch);
             this.PanelSearch.Controls.Add(this.TxtSearch);
-            this.PanelSearch.Location = new System.Drawing.Point(205, 68);
+            this.PanelSearch.Location = new System.Drawing.Point(199, 68);
             this.PanelSearch.Name = "PanelSearch";
             this.PanelSearch.Size = new System.Drawing.Size(292, 40);
             this.PanelSearch.TabIndex = 11;
@@ -255,6 +257,7 @@
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
             this.editToolStripMenuItem,
+            this.formatToolStripMenuItem,
             this.searchToolStripMenuItem,
             this.viewToolStripMenuItem,
             this.toggleCollapseToolStripMenuItem,
@@ -545,6 +548,13 @@
             this.toggleCollapseToolStripMenuItem.Text = "[<-]";
             this.toggleCollapseToolStripMenuItem.Click += new System.EventHandler(this.toggleCollapseToolStripMenuItem_Click);
             // 
+            // disableToolStripMenuItem
+            // 
+            this.disableToolStripMenuItem.Name = "disableToolStripMenuItem";
+            this.disableToolStripMenuItem.Size = new System.Drawing.Size(83, 23);
+            this.disableToolStripMenuItem.Text = "RUNNING";
+            this.disableToolStripMenuItem.Click += new System.EventHandler(this.disableToolStripMenuItem_Click);
+            // 
             // ClipType
             // 
             this.ClipType.Items.AddRange(new object[] {
@@ -559,12 +569,21 @@
             this.ClipType.SelectedIndexChanged += new System.EventHandler(this.ClipType_SelectedIndexChanged);
             this.ClipType.Leave += new System.EventHandler(this.ClipType_Leave);
             // 
-            // disableToolStripMenuItem
+            // formatToolStripMenuItem
             // 
-            this.disableToolStripMenuItem.Name = "disableToolStripMenuItem";
-            this.disableToolStripMenuItem.Size = new System.Drawing.Size(83, 23);
-            this.disableToolStripMenuItem.Text = "RUNNING";
-            this.disableToolStripMenuItem.Click += new System.EventHandler(this.disableToolStripMenuItem_Click);
+            this.formatToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.beautifyToolStripMenuItem});
+            this.formatToolStripMenuItem.Name = "formatToolStripMenuItem";
+            this.formatToolStripMenuItem.Size = new System.Drawing.Size(65, 23);
+            this.formatToolStripMenuItem.Text = "Format";
+            // 
+            // beautifyToolStripMenuItem
+            // 
+            this.beautifyToolStripMenuItem.Name = "beautifyToolStripMenuItem";
+            this.beautifyToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+1";
+            this.beautifyToolStripMenuItem.Size = new System.Drawing.Size(176, 24);
+            this.beautifyToolStripMenuItem.Text = "Beautify";
+            this.beautifyToolStripMenuItem.Click += new System.EventHandler(this.beautifyToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -644,6 +663,8 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Type;
         private System.Windows.Forms.ToolStripComboBox ClipType;
         private System.Windows.Forms.ToolStripMenuItem disableToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem formatToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem beautifyToolStripMenuItem;
     }
 }
 

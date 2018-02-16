@@ -28,6 +28,7 @@ namespace MultiClipboardDeluxePro
         bool IsDisabled = false;
         private string Default_Font = "Consolas";
         string lastClipboardText;
+        StringBuilder sb1 = new StringBuilder();
 
         private void MainForm_Load(object sender, EventArgs e)
         {
@@ -548,7 +549,12 @@ namespace MultiClipboardDeluxePro
 			Lowercase();
 		}
 
-		private void wordWrapToolStripMenuItem1_Click(object sender, EventArgs e) {
+        private void beautifyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Beautify();
+        }
+
+        private void wordWrapToolStripMenuItem1_Click(object sender, EventArgs e) {
 
             // toggle word wrap
             wordWrapItem.Checked = !wordWrapItem.Checked;
@@ -617,6 +623,25 @@ namespace MultiClipboardDeluxePro
 
 
         #endregion
+
+        #region Format
+
+        private void Beautify()
+        {
+            Utils.Beautifier b1 = new Utils.Beautifier(TextArea.Text);
+            b1.handler += new EventHandler((oSender, eArgs) => {
+                InvokeIfNeeded(() =>
+                {
+                    TextArea.Text = b1.sb1.ToString();
+                });
+            });
+
+            b1.StartProcess();
+        }
+
+
+        #endregion
+
 
         #region Uppercase / Lowercase
 
@@ -787,11 +812,14 @@ namespace MultiClipboardDeluxePro
 			}
 		}
 
+
+
         private long GetSelectedClipID()
         {
             string strID = ClipList.SelectedRows[0].Cells[0].Value.ToString();
             return long.Parse(strID);
         }
+
 
         #endregion
 
