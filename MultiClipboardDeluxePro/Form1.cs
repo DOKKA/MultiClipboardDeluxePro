@@ -551,7 +551,17 @@ namespace MultiClipboardDeluxePro
 
         private void beautifyToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Beautify();
+            Beautify("js");
+        }
+
+        private void htmlBeautifyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Beautify("html");
+        }
+
+        private void cssBeautifyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Beautify("css");
         }
 
         private void wordWrapToolStripMenuItem1_Click(object sender, EventArgs e) {
@@ -626,9 +636,9 @@ namespace MultiClipboardDeluxePro
 
         #region Format
 
-        private void Beautify()
+        private void Beautify(string type)
         {
-            Utils.Beautifier b1 = new Utils.Beautifier(TextArea.Text);
+            Utils.Beautifier b1 = new Utils.Beautifier(type, TextArea.Text);
             b1.handler += new EventHandler((oSender, eArgs) => {
                 InvokeIfNeeded(() =>
                 {
@@ -819,6 +829,8 @@ namespace MultiClipboardDeluxePro
             string strID = ClipList.SelectedRows[0].Cells[0].Value.ToString();
             return long.Parse(strID);
         }
+
+
 
 
         #endregion

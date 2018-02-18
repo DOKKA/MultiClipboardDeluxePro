@@ -13,7 +13,7 @@ namespace MultiClipboardDeluxePro.Utils
         public EventHandler handler;
         string jsString = "";
 
-        public Beautifier(string jsstring) {
+        public Beautifier(string type, string jsstring) {
             jsString = jsstring;
             string path = Environment.GetEnvironmentVariable("PATH");
             var npmPath = path.Split(';').Where(p => p.Contains("npm")).First();
@@ -28,7 +28,7 @@ namespace MultiClipboardDeluxePro.Utils
             proc.StartInfo.RedirectStandardError = true;
             proc.EnableRaisingEvents = true;
             proc.StartInfo.FileName = fileName;
-            proc.StartInfo.Arguments = "-";
+            proc.StartInfo.Arguments = "- --type="+type;
             proc.OutputDataReceived += Proc_OutputDataReceived;
         }
 

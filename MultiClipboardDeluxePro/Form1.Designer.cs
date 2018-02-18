@@ -60,6 +60,8 @@
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.uppercaseSelectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.lowercaseSelectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.formatToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.beautifyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.searchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.findToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.findDialogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -80,8 +82,8 @@
             this.toggleCollapseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.disableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ClipType = new System.Windows.Forms.ToolStripComboBox();
-            this.formatToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.beautifyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.htmlBeautifyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.cssBeautifyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.SplitPanel)).BeginInit();
             this.SplitPanel.Panel1.SuspendLayout();
             this.SplitPanel.Panel2.SuspendLayout();
@@ -177,7 +179,7 @@
             this.PanelSearch.Controls.Add(this.BtnPrevSearch);
             this.PanelSearch.Controls.Add(this.BtnCloseSearch);
             this.PanelSearch.Controls.Add(this.TxtSearch);
-            this.PanelSearch.Location = new System.Drawing.Point(199, 68);
+            this.PanelSearch.Location = new System.Drawing.Point(193, 68);
             this.PanelSearch.Name = "PanelSearch";
             this.PanelSearch.Size = new System.Drawing.Size(292, 40);
             this.PanelSearch.TabIndex = 11;
@@ -405,6 +407,24 @@
             this.lowercaseSelectionToolStripMenuItem.Text = "Lowercase";
             this.lowercaseSelectionToolStripMenuItem.Click += new System.EventHandler(this.lowercaseSelectionToolStripMenuItem_Click);
             // 
+            // formatToolStripMenuItem
+            // 
+            this.formatToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.beautifyToolStripMenuItem,
+            this.htmlBeautifyToolStripMenuItem,
+            this.cssBeautifyToolStripMenuItem});
+            this.formatToolStripMenuItem.Name = "formatToolStripMenuItem";
+            this.formatToolStripMenuItem.Size = new System.Drawing.Size(65, 23);
+            this.formatToolStripMenuItem.Text = "Format";
+            // 
+            // beautifyToolStripMenuItem
+            // 
+            this.beautifyToolStripMenuItem.Name = "beautifyToolStripMenuItem";
+            this.beautifyToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+1";
+            this.beautifyToolStripMenuItem.Size = new System.Drawing.Size(217, 24);
+            this.beautifyToolStripMenuItem.Text = "JS Beautify";
+            this.beautifyToolStripMenuItem.Click += new System.EventHandler(this.beautifyToolStripMenuItem_Click);
+            // 
             // searchToolStripMenuItem
             // 
             this.searchToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -569,21 +589,21 @@
             this.ClipType.SelectedIndexChanged += new System.EventHandler(this.ClipType_SelectedIndexChanged);
             this.ClipType.Leave += new System.EventHandler(this.ClipType_Leave);
             // 
-            // formatToolStripMenuItem
+            // htmlBeautifyToolStripMenuItem
             // 
-            this.formatToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.beautifyToolStripMenuItem});
-            this.formatToolStripMenuItem.Name = "formatToolStripMenuItem";
-            this.formatToolStripMenuItem.Size = new System.Drawing.Size(65, 23);
-            this.formatToolStripMenuItem.Text = "Format";
+            this.htmlBeautifyToolStripMenuItem.Name = "htmlBeautifyToolStripMenuItem";
+            this.htmlBeautifyToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+2";
+            this.htmlBeautifyToolStripMenuItem.Size = new System.Drawing.Size(217, 24);
+            this.htmlBeautifyToolStripMenuItem.Text = "HTML Beautify";
+            this.htmlBeautifyToolStripMenuItem.Click += new System.EventHandler(this.htmlBeautifyToolStripMenuItem_Click);
             // 
-            // beautifyToolStripMenuItem
+            // cssBeautifyToolStripMenuItem
             // 
-            this.beautifyToolStripMenuItem.Name = "beautifyToolStripMenuItem";
-            this.beautifyToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+1";
-            this.beautifyToolStripMenuItem.Size = new System.Drawing.Size(176, 24);
-            this.beautifyToolStripMenuItem.Text = "Beautify";
-            this.beautifyToolStripMenuItem.Click += new System.EventHandler(this.beautifyToolStripMenuItem_Click);
+            this.cssBeautifyToolStripMenuItem.Name = "cssBeautifyToolStripMenuItem";
+            this.cssBeautifyToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+3";
+            this.cssBeautifyToolStripMenuItem.Size = new System.Drawing.Size(217, 24);
+            this.cssBeautifyToolStripMenuItem.Text = "CSS Beautify";
+            this.cssBeautifyToolStripMenuItem.Click += new System.EventHandler(this.cssBeautifyToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -665,6 +685,8 @@
         private System.Windows.Forms.ToolStripMenuItem disableToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem formatToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem beautifyToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem htmlBeautifyToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem cssBeautifyToolStripMenuItem;
     }
 }
 
